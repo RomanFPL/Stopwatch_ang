@@ -18,16 +18,15 @@ export class TimerComponent implements OnInit {
   caunter = interval(1000);
   stopwatch: any;
   cv: number = 0;
-  previousValue: number = 0;
 
 
-  initCounter = (n: number) => {
-    this.stopwatch = this.caunter.subscribe(() => {
-    n++;
-    this.currentTimeS = (n%60<10) ? `0${n%60}` : `${n%60}`;
-    this.currentTimeM = (n/60<10) ? `0${Math.floor(n/60)}` : `${Math.floor(n/60)}`;
+  initCounter = () => {
     this.started = true;
     this.isWaited = false;
+    this.stopwatch = this.caunter.subscribe(() => {
+    this.cv++;
+    this.currentTimeS = (this.cv%60<10) ? `0${this.cv%60}` : `${this.cv%60}`;
+    this.currentTimeM = (this.cv/60<10) ? `0${Math.floor(this.cv/60)}` : `${Math.floor(this.cv/60)}`;
     })
   }
 
@@ -51,7 +50,7 @@ export class TimerComponent implements OnInit {
 
   handleStart = () => {
     if(this.isWaited || !this.started){
-      this.initCounter(this.cv);
+      this.initCounter();
     } else {
       this.resetCounter();
       this.started = false;
@@ -63,13 +62,14 @@ export class TimerComponent implements OnInit {
   handleWait = () => {
     if(this.started){
       this.stopwatch.unsubscribe();
+      this.isWaited = true;
     }
   }
 
   handleReset = () => {
       if(this.started){
         this.resetCounter();
-        this.initCounter(this.cv);
+        this.initCounter();
     }
   }
 }
