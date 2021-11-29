@@ -1,8 +1,8 @@
 <div class="timer-counter text-center">
     <h1 class="w-100">{{currentTimeM}}:{{currentTimeS}}</h1>
     <div class="btn-panel w-100">
-        <button type="button" class="btn btn-primary mx-1" (click)="handleStart()">{{!started ? "Start" : (isWaited) ? "Continue" : "Stop"}}</button>
-        <button type="button" class="btn btn-secondary mx-1" (click)="handleDobleClick()">Wait</button>
-        <button type="button" class="btn btn-warning mx-1" (click)="handleReset()">Reset</button>
+        <button type="button" id="start-btn" class="btn btn-primary mx-1" (click)="handleStart()">{{!started ? "Start" : (isWaited) ? "Continue" : "Stop"}}</button>
+        <button type="button" id="wait-btn" class="btn btn-secondary mx-1" (click)="handleDobleClick()">Wait</button>
+        <button type="button" id="reset-btn" class="btn btn-warning mx-1" (click)="handleReset()">Reset</button>
     </div>
 </div>
