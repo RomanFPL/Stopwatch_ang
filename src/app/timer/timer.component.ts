@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {buffer, delay, filter, fromEvent, interval, throttleTime, timeout} from 'rxjs';
+import {auditTime, buffer, debounceTime, delay, filter, fromEvent, interval, throttleTime, timeout} from 'rxjs';
 
 @Component({
   selector: 'app-timer',
@@ -18,16 +18,17 @@ export class TimerComponent implements OnInit {
   cv: number = 0;
 
   ngOnInit(): void { 
-    const clicks$ = fromEvent(document.getElementById("wait-btn")!, 'click');
-    clicks$
+    const clicksOnWait$ = fromEvent(document.getElementById("wait-btn")!, 'click');
+    clicksOnWait$
     .pipe(
       // Bugs occurred
       // buffer(clicks$.pipe(throttleTime(500))),
-      buffer(clicks$.pipe(delay(500))),
+      // Emit first value then ignore for specified duration
+      buffer(clicksOnWait$.pipe(auditTime(500))),
       filter(clickArray => clickArray.length > 1)
       )
-      .subscribe(() => {this.handleWait() 
-        console.log('Double Click!')});
+      .subscribe((v) => {v.length == 2 && this.handleWait() 
+      });
   }
 
   initCounter = () => {
@@ -46,18 +47,6 @@ export class TimerComponent implements OnInit {
     this.currentTimeS = "00";
     this.currentTimeM = "00";
   }
-
-  handleDobleClick = () => {
-
-    // if(this.clickInit){
-    //   this.handleWait()
-    //   this.isWaited = true;
-    // } else {
-    //   this.clickInit = true;
-    //   setTimeout(()=> {this.clickInit = false}, 500)
-    // }
-  }
-
 
   handleStart = () => {
     if(this.isWaited || !this.started){
